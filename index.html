@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Up-Down Map</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div id="map"></div>
+
+
+
+  <script>
+    // Client info from API
+
+    var clientInfo = [{
+        name: "the cool client",
+        address: '85 South Road Winter Park, FL 32792',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-check-icon.png',
+        ip: '123.98.99.88',
+        content: '<h1>UP</h1>'
+      },
+      {
+        name: "the nice client",
+        address: '8409 N. Bayberry Avenue Winder, GA 30680',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-check-icon.png',
+        content: '<h1>up</h1>'
+      },
+      {
+        name: "the mad client",
+        address: '377 N. Southampton Drive Chesapeake, VA 23320',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-error-icon.png',
+        content: '<h1>Down</h1>'
+      },
+      {
+        name: "<h2> cool client<h2>",
+        address: '3 Whitemarsh Lane Chesterfield, VA 23832',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-error-icon.png',
+        content: '<h1>down</h1>'
+      }, {
+        name: "<h2> client 007 <h2>",
+        address: '7511 W. Middle River Court Mundelein, IL 60060',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-check-icon.png',
+        content: '<h1>up</h1>'
+      }, {
+        name: "<h2> the client<h2>",
+        address: '468 Hall Street Hobart, IN 46342',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-check-icon.png',
+        content: '<h1>up</h1>'
+      }, {
+        name: "<h2> client 767 <h2>",
+        address: '9355 Wellington St. Providence, RI 02904',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-check-icon.png',
+        content: '<h1>up</h1>'
+      }, {
+        name: "<h2> client 22 <h2>",
+        address: '407 Williams Street New Albany, IN 47150',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-check-icon.png',
+        content: '<h1>up</h1>'
+      }, {
+        name: "<h2> the client<h2>",
+        address: '65 Briarwood Avenue San Diego, CA 92114',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-check-icon.png',
+        content: '<h1>up</h1>'
+      }, {
+        name: "<h2> cool client<h2>",
+        address: '664 Devon Ave. El Cajon, CA 92021',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-error-icon.png',
+        content: '<h1>down</h1>'
+      }, {
+        name: "<h2> not cool client<h2>",
+        address: '808 Sutter Street San Francisco, CA 94109',
+        markerIcon: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/32/sign-check-icon.png',
+        content: '<h1>UP</h1>'
+      }
+    ];
+
+    // Google Maps API function
+    var geocoder;
+    var map;
+    var mapOptions = {
+      zoom: 4,
+      center: {
+        lat: 40.302,
+        lng: -100.015
+      },
+      mapTypeId: 'satellite'
+    };
+
+    function initMap() {
+      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      map.setMapTypeId('terrain');
+      map.setOptions({
+        minZoom: 4,
+        maxZoom: 20
+      });
+
+      geocoder = new google.maps.Geocoder();
+      codeAddress(geocoder, map);
+    }
+
+    function codeAddress(geocoder, map) {
+      // add markers dynamically 
+      for (let i = 0; i < clientInfo.length; i++) {
+        geocoder.geocode({
+          'address': clientInfo[i].address
+        }, function (results, status) {
+          if (status === 'OK') {
+            // add marker function 
+            var marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location,
+              icon: clientInfo[i].markerIcon
+
+            });
+
+
+
+            // add pop up info to the marker
+            var infoWindow = new google.maps.InfoWindow({
+              content: clientInfo[i].name + clientInfo[i].content + clientInfo[i].address + " ip " + clientInfo[
+                i].ip
+
+            });
+            //pop up info function
+            marker.addListener('click', function () {
+              infoWindow.open(map, marker);
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    }
+  </script>
+
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3Z0ATnpcC4_f9spbpVbtMGUyNppWphEg&callback=initMap">
+  </script>
+
+</body>
+
+</html>
